@@ -1,5 +1,7 @@
-package dev.kopasz.sla_itsm_api.dto;
+package dev.kopasz.sla_itsm_api.api.dto.request;
 
+import dev.kopasz.sla_itsm_api.domain.model.Priority;
+import dev.kopasz.sla_itsm_api.domain.model.Severity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,7 +23,7 @@ public record TicketCreateRequest(
     String description,
 
     @NotNull
-    Priority priority,
+    Severity severity,
 
     List<String> affectedServices
 

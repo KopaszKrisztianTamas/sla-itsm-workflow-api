@@ -1,9 +1,9 @@
-package dev.kopasz.sla_itsm_api.dto;
+package dev.kopasz.sla_itsm_api.api.dto.response;
 
 import java.time.LocalDateTime;
 
 public record SlaResponse (
-    String tickedId,
+    String ticketId,
     LocalDateTime resolutionDeadline,
     boolean isBreached
 )
