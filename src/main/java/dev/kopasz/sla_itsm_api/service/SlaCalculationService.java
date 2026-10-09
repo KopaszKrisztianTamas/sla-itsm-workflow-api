@@ -5,43 +5,71 @@ import dev.kopasz.sla_itsm_api.api.dto.response.SlaResponse;
 import dev.kopasz.sla_itsm_api.domain.model.Priority;
 import dev.kopasz.sla_itsm_api.domain.model.Ticket;
 import dev.kopasz.sla_itsm_api.domain.model.TicketStatus;
-import dev.kopasz.sla_itsm_api.domain.strategy.SlaCalculationStrategy;
+import dev.kopasz.sla_itsm_api.domain.strategy.SlaStrategyFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Map;
+// SlaStrategy selection solution #1
+// import java.util.Map;
+
 import java.util.UUID;
+
+import static java.time.LocalDateTime.now;
 
 @Service
 public class SlaCalculationService {
 
-    private Map<String, SlaCalculationStrategy> strategies;
+    //  SlaStrategy selection solution #1 - Spring Map injection
+    //  private Map<String, SlaCalculationStrategy> strategies;
 
-    public SlaCalculationService(Map<String, SlaCalculationStrategy> strategies) {}
+    //  SlaStrategy selection solution #2 - Compile-time checked Domain Driven design - more robust
+    private final SlaStrategyFactory slaStrategyFactory;
+
+    public SlaCalculationService(SlaStrategyFactory slaStrategyFactory) {
+        this.slaStrategyFactory = slaStrategyFactory;
+    }
 
     public SlaResponse processTicketCreation(TicketCreateRequest ticketCreateRequest) {
 
         Priority priority = switch (ticketCreateRequest.severity()) {
             case S1 ->  Priority.CRITICAL;
             case S2 ->  Priority.HIGH;
-            case S3 ->  Priority.MEDIUM;
+            case S3 ->  Priority.NORMAL;
             case S4 ->  Priority.LOW;
         };
-        SlaCalculationStrategy strategy = strategies.get(priority.name());
-        if (strategy == null) { throw new RuntimeException("Strategy not found"); }
+
+        // SlaStrategy selection solution #1
+        //  SlaCalculationStrategy strategy = strategies.get(priority.name());
+
+        //  if (strategy == null) {
+        //      throw new org.springframework.web.server.ResponseStatusException(
+        //              org.springframework.http.HttpStatus.BAD_REQUEST,
+        //              "Ismeretlen prioritás az SlaStrategy kiválasztásakor."
+        //      );
+        //  }
 
         Ticket ticket = new Ticket(
             UUID.randomUUID().toString(),
             ticketCreateRequest.title(),
             priority,
             TicketStatus.OPEN,
-            LocalDateTime.now(),
-            null
+            now(),
+                null
         );
 
-        ticket.deadline(strategy.calculateDeadline(ticket));
+        Ticket ticket2 = new Ticket(
+                ticket.id(),
+                ticket.title(),
+                ticket.priority(),
+                ticket.status(),
+                ticket.createdAt(),
 
+                //  solution #2
+                slaStrategyFactory.getStrategy(priority).calculateDeadline(ticket)
+        );
 
+        return new SlaResponse(
+                ticket2.id(), ticket2.deadline(), false
+        );
 
     }
 }

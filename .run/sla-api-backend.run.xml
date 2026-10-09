@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="sla-api-backend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="sla-itsm-workflow-api.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="dev.kopasz.sla_itsm_api.SlaItsmApiApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

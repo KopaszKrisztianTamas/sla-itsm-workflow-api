@@ -14,7 +14,7 @@ import java.util.List;
  */
 public record TicketCreateRequest(
 
-    @NotNull
+    @NotNull(message = "A cím nem lehet üres")
     @NotBlank
     @Size(max = 100)
     String title,
@@ -22,7 +22,7 @@ public record TicketCreateRequest(
     @NotBlank
     String description,
 
-    @NotNull
+    @NotNull(message = "A severity megadása kötelező")
     Severity severity,
 
     List<String> affectedServices
