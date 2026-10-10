@@ -11,5 +11,16 @@ public record Ticket(
     LocalDateTime createdAt,
     LocalDateTime deadline
 
-) {}
+) {
+    public Ticket(Ticket baseTicket, LocalDateTime deadline) {
+        this(baseTicket.id(),
+             baseTicket.title(),
+             baseTicket.priority,
+             baseTicket.status,
+             baseTicket.createdAt,
+             deadline
+        );
+    }
+
+}
 

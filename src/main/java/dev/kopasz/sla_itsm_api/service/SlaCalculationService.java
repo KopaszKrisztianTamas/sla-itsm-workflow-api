@@ -8,8 +8,9 @@ import dev.kopasz.sla_itsm_api.domain.model.TicketStatus;
 import dev.kopasz.sla_itsm_api.domain.strategy.SlaStrategyFactory;
 import org.springframework.stereotype.Service;
 
-// SlaStrategy selection solution #1
-// import java.util.Map;
+//SlaStrategy selection solution #1
+//import java.util.Map;
+//import dev.kopasz.sla_itsm_api.domain.exception.SlaCalculationException;
 
 import java.util.UUID;
 
@@ -37,15 +38,16 @@ public class SlaCalculationService {
             case S4 ->  Priority.LOW;
         };
 
-        // SlaStrategy selection solution #1
-        //  SlaCalculationStrategy strategy = strategies.get(priority.name());
+/*
+         SlaStrategy selection solution #1
 
-        //  if (strategy == null) {
-        //      throw new org.springframework.web.server.ResponseStatusException(
-        //              org.springframework.http.HttpStatus.BAD_REQUEST,
-        //              "Ismeretlen prioritás az SlaStrategy kiválasztásakor."
-        //      );
-        //  }
+         SlaCalculationStrategy strategy = strategies.get(priority.name());
+         if (strategy == null) {
+             throw new SlaCalculationException(
+                     "Strategy not found for ticket having severity " + ticketCreateRequest.severity() +
+                     ", priority " + priority.name());
+         }
+*/
 
         Ticket ticket = new Ticket(
             UUID.randomUUID().toString(),
@@ -56,19 +58,14 @@ public class SlaCalculationService {
                 null
         );
 
-        Ticket ticket2 = new Ticket(
-                ticket.id(),
-                ticket.title(),
-                ticket.priority(),
-                ticket.status(),
-                ticket.createdAt(),
-
+        Ticket ticketWDeadline = new Ticket(
+                ticket,
                 //  solution #2
                 slaStrategyFactory.getStrategy(priority).calculateDeadline(ticket)
         );
 
         return new SlaResponse(
-                ticket2.id(), ticket2.deadline(), false
+                ticketWDeadline.id(), ticketWDeadline.deadline(), false
         );
 
     }
