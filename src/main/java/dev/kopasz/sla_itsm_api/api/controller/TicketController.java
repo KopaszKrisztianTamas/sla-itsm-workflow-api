@@ -1,7 +1,7 @@
 package dev.kopasz.sla_itsm_api.api.controller;
 
 import dev.kopasz.sla_itsm_api.api.dto.response.SlaResponse;
-import dev.kopasz.sla_itsm_api.api.dto.request.TicketCreateRequest;
+import dev.kopasz.sla_itsm_api.api.dto.request.TicketCreateRequestDTO;
 import dev.kopasz.sla_itsm_api.service.SlaCalculationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<SlaResponse> createTicket(@Valid @RequestBody TicketCreateRequest request){
+    public ResponseEntity<SlaResponse> createTicket(@Valid @RequestBody TicketCreateRequestDTO request){
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

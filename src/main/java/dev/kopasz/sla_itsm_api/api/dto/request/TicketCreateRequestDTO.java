@@ -1,6 +1,5 @@
 package dev.kopasz.sla_itsm_api.api.dto.request;
 
-import dev.kopasz.sla_itsm_api.domain.model.Priority;
 import dev.kopasz.sla_itsm_api.domain.model.Severity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * Input payload of API POST request
  */
-public record TicketCreateRequest(
+public record TicketCreateRequestDTO(
 
     @NotNull(message = "A cím nem lehet üres")
     @NotBlank
@@ -29,7 +28,7 @@ public record TicketCreateRequest(
 
 ){
 
-    public TicketCreateRequest {
+    public TicketCreateRequestDTO {
         if (affectedServices == null) {
             affectedServices = new ArrayList<>();
         }
