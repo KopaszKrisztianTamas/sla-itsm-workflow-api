@@ -18,25 +18,28 @@ repositories {
 }
 
 dependencies {
+	// 1. Spring Boot Starters & Framework
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.h2database:h2'
 
-	// Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+	// 2. Mapping & API Documentation
 	implementation("org.mapstruct:mapstruct:1.6.3")
-
-	annotationProcessor 'org.projectlombok:lombok'
-	// Source: https://mvnrepository.com/artifact/org.projectlombok/lombok-mapstruct-binding
-	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-	compileOnly 'org.projectlombok:lombok'
-
-	// Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
-	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
-
-	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
 
+	// 3. Compile Time & Annotation Processors
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'							// STEP 1
+	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")	// STEP 2
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3") 			// STEP 3
+
+	// 4. Runtime
+
+	// 5. Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testImplementation 'com.h2database:h2'
 	testCompileOnly 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testAnnotationProcessor 'org.projectlombok:lombok'
