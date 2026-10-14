@@ -13,7 +13,7 @@ import java.util.List;
  */
 public record TicketCreateRequestDTO(
 
-    @NotNull(message = "A cím nem lehet üres")
+    @NotNull(message = "Title must not be empty")
     @NotBlank
     @Size(max = 100)
     String title,

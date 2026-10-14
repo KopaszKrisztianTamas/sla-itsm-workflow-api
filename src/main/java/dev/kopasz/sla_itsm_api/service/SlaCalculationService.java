@@ -1,19 +1,15 @@
 package dev.kopasz.sla_itsm_api.service;
 
 import dev.kopasz.sla_itsm_api.api.dto.request.TicketCreateRequestDTO;
-import dev.kopasz.sla_itsm_api.api.dto.response.SlaResponse;
-import dev.kopasz.sla_itsm_api.api.mapper.TicketMapper;
+import dev.kopasz.sla_itsm_api.mapper.TicketMapper;
 import dev.kopasz.sla_itsm_api.domain.model.Priority;
 import dev.kopasz.sla_itsm_api.domain.model.Ticket;
-import dev.kopasz.sla_itsm_api.domain.model.TicketStatus;
 import dev.kopasz.sla_itsm_api.domain.strategy.SlaStrategyFactory;
 import org.springframework.stereotype.Service;
 
 //SlaStrategy selection solution #1
 //import java.util.Map;
 //import dev.kopasz.sla_itsm_api.domain.exception.SlaCalculationException;
-
-import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 
@@ -32,7 +28,7 @@ public class SlaCalculationService {
         this.ticketMapper = ticketMapper;
     }
 
-    public SlaResponse processTicketCreation(TicketCreateRequestDTO ticketCreateRequestDTO) {
+    public Ticket processTicketCreation(TicketCreateRequestDTO ticketCreateRequestDTO) {
 
         Priority priority = switch (ticketCreateRequestDTO.severity()) {
             case S1 ->  Priority.CRITICAL;
@@ -51,17 +47,12 @@ public class SlaCalculationService {
                      ", priority " + priority.name());
          }
 */
+        Ticket ticket = ticketMapper.dtoToTicket(ticketCreateRequestDTO);
 
-        Ticket ticket = ticketMapper.TicketCreateRequestDTOToTicket(ticketCreateRequestDTO);
-
-        Ticket ticketWDeadline = new Ticket(
+        return new Ticket(
                 ticket,
                 //  solution #2
                 slaStrategyFactory.getStrategy(priority).calculateDeadline(ticket)
-        );
-
-        return new SlaResponse(
-                ticketWDeadline.id(), ticketWDeadline.deadline(), false
         );
 
     }

@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 
         ProblemDetail problemDetail = ProblemDetail
                 .forStatusAndDetail(HttpStatus.BAD_REQUEST,e.getMessage()+
-                        " / Egy vagy több mező érvénytelen a bejövő kérésben");
+                        " / One or more fields are invalid in the incoming request");
         problemDetail.setTitle("Validation Error");
 
         Map<String, String> validationErrors = e.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(
